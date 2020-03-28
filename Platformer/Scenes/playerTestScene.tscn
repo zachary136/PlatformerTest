@@ -17,5 +17,5 @@ material = ExtResource( 2 )
 transform = Transform( 50, 0, 0, 0, 0.1, 0, 0, 0, 50, 0, 0, 0 )
 shape = SubResource( 1 )
 
-[node name="Spatial" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+[node name="Player" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0 )
