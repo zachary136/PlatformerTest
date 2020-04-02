@@ -24,12 +24,15 @@ var lastMousePos;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN);
+	lastMousePos = get_viewport().get_mouse_position();
 	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	getInputs();
+	mouseMovement(delta)
 	MoveCharacter(delta);
 	pass
 
@@ -37,10 +40,12 @@ func MoveCharacter(var delta):
 	if(!is_on_floor()):
 		UpAxisSpeed -= 18*delta;
 	else:
-		UpAxisSpeed = 0;
 		if(Input.action_press("Jump")):
 			translate(Vector3(0, 20, 0))
-			UpAxisSpeed += 200;
+			UpAxisSpeed = 200;
+		else:
+			UpAxisSpeed = 0;
+			pass
 		pass
 	
 	
@@ -61,7 +66,7 @@ func getInputs():
 	#mouseY = -Input.get_joy_axis(0, 3);
 	#if(abs(mouseY) < .2):
 		#mouseY = 0
-	forwardAxis = Input.get_joy_axis(0, 1) + (Input.get_action_strength("moveForward") - Input.get_action_strength("moveBackwards"));
+	forwardAxis = Input.get_joy_axis(0, 1) + (Input.get_action_strength("moveBackwards") - Input.get_action_strength("moveForward"));
 	if(abs(forwardAxis) < .2):
 		forwardAxis = 0;
 	rightAxis = Input.get_joy_axis(0, 0) + (Input.get_action_strength("moveRight") - Input.get_action_strength("moveLeft"));
@@ -71,9 +76,10 @@ func getInputs():
 	axis.clamped(1);
 	pass
 	
-func _input(event):
-	if event is InputEventMouseMotion:
-		mouseX = event.speed.x*.01;
-		mouseY = event.speed.y*.01;
-		pass
+func mouseMovement(var delta):
+	var mouseDifference = get_viewport().get_mouse_position() - Vector2(512, 512);
+	mouseX = -mouseDifference.x*delta*5;
+	mouseY = -mouseDifference.y*delta*5;
+	get_viewport().warp_mouse(Vector2(512, 512));
+	lastMousePos = get_viewport().get_mouse_position();
 	pass
