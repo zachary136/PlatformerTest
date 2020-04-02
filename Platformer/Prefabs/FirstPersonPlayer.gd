@@ -20,6 +20,8 @@ var rightAxis;
 var axis;
 onready var cam = $Camera;
 
+var lastMousePos;
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -53,18 +55,25 @@ func MoveCharacter(var delta):
 
 func getInputs():
 	
-	mouseX = -Input.get_joy_axis(0, 2);
-	if(abs(mouseX) < .2):
-		mouseX = 0;
-	mouseY = -Input.get_joy_axis(0, 3);
-	if(abs(mouseY) < .2):
-		mouseY = 0
-	forwardAxis = Input.get_joy_axis(0, 1);
+	#mouseX = -Input.get_joy_axis(0, 2);
+	#if(abs(mouseX) < .2):
+		#mouseX = 0;
+	#mouseY = -Input.get_joy_axis(0, 3);
+	#if(abs(mouseY) < .2):
+		#mouseY = 0
+	forwardAxis = Input.get_joy_axis(0, 1) + (Input.get_action_strength("moveForward") - Input.get_action_strength("moveBackwards"));
 	if(abs(forwardAxis) < .2):
 		forwardAxis = 0;
-	rightAxis = Input.get_joy_axis(0, 0);
+	rightAxis = Input.get_joy_axis(0, 0) + (Input.get_action_strength("moveRight") - Input.get_action_strength("moveLeft"));
 	if(abs(rightAxis)<.2):
 		rightAxis = 0;
 	axis = Vector2(rightAxis, forwardAxis)
 	axis.clamped(1);
+	pass
+	
+func _input(event):
+	if event is InputEventMouseMotion:
+		mouseX = event.speed.x*.01;
+		mouseY = event.speed.y*.01;
+		pass
 	pass
